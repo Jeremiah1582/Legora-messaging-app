@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  conversations ConversationParticipant[]
+  messages     Message[] @relation("MessageSender")
+  @@map("users")
+}
+
+model Conversation {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  participants ConversationParticipant[]
+  messages    Message[]
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id             String       @id @default(uuid())
+  conversationId String       @map("conversation_id")
+  userId         String       @map("user_id")
+  joinedAt       DateTime     @default(now()) @map("joined_at")
+  conversation   Conversation  @relation(fields: [conversationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
+  @@unique([conversationId, userId])
+  @@index([userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  conversationId String        @map("conversation_id")
+  senderId       String        @map("sender_id")
+  content        String
+  createdAt      DateTime      @default(now()) @map("created_at")
+  conversation   Conversation  @relation(fields: [conversationId], references: [id])
+  sender         User          @relation("MessageSender", fields: [senderId], references: [id])
+  @@index([conversationId, createdAt])
+  @@map("messages")
+}
