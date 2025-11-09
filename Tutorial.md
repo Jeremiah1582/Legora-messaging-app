@@ -822,7 +822,7 @@ app.use('/api/messages', messageRoutes)
 ```
 
 ---
---------------------HERE--------
+
 ## Step 7: Frontend Setup
 
 **WHAT:** Configure Next.js frontend to call backend API and setup Socket.IO client.
@@ -865,7 +865,6 @@ export async function apiCall(
   })
 }
 ```
-
 **7c. Create Socket.IO client utility:**
 
 Create `frontend/src/lib/socket.ts`:
@@ -893,7 +892,7 @@ export function disconnectSocket() {
 }
 ```
 
----
+--------------------HERE--------
 
 ## Step 8: Frontend Pages
 
@@ -905,7 +904,7 @@ export function disconnectSocket() {
 
 **8a. Login Page**
 
-Create `frontend/src/app/login/page.tsx`:
+Create `frontend/app/login/page.tsx`:
 ```typescript
 'use client'
 import { useState } from 'react'
