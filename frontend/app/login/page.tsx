@@ -19,9 +19,11 @@ type Mode = 'login' | 'register';
 function persistSession(accessToken: string, user: AuthResponse['user']) {
   const maxAgeSeconds = 15 * 60; // align with backend access token expiry
   const secure = window.location.protocol === 'https:';
-  document.cookie = `accessToken=${encodeURIComponent(
-    accessToken,
-  )}; path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax${secure ? '; Secure' : ''}`;
+  // document.cookie = `accessToken=${encodeURIComponent(
+  //   accessToken,
+  // )}; path=/; Max-Age=${maxAgeSeconds}; SameSite=Lax${secure ? '; Secure' : ''}`;
+
+  // storing accesstoken in local storage instead of cookie to avoid cors issues for now
   window.localStorage.setItem('accessToken', accessToken);
 
   if (user) {
