@@ -37,11 +37,11 @@ app.use(express.json()) //allows data being parsed to be available in req.body
 app.get('/health', (req, res)=>{res.json({status:'backend is running ok'})})
 
 // Socket.IO connection handler
-io.on('connection', (socket)=>{
+io.on('connection', (socket)=>{ //handle new client connections
     console.log('Client connected:', socket.id)
 
-    socket.on('room:join', (conversationId: string)=>{
-        socket.join(conversationId)
+    socket.on('room:join', (conversationId: string)=>{//it is from the frontend when the user joins a conversation.
+        socket.join(conversationId) //join the socket to the conversation room
         console.log(`Socket ${socket.id} joined room ${conversationId}`)
     })
 
